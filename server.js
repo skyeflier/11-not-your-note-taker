@@ -35,7 +35,18 @@ app.get('/api/notes', (req, res) =>
 );
 
 app.post('/api/notes', (req, res) => {
+    req.body.id = Math.floor(Math.random() * 1000000)
     notes.push(req.body)
+    fs.writeFileSync('./db/db.json', JSON.stringify(notes))
+    res.json(notes)
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+    for (let i = 0; i < notes.length; i++) {
+        if (req.params.id == notes[i].id) {
+            notes.splice(i, 1)
+        }
+    }
     fs.writeFileSync('./db/db.json', JSON.stringify(notes))
     res.json(notes)
 });
